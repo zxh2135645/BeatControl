@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+ {% block page_content %}
+<div class="page-header">
+    <h1>BeatControl under construction</h1>
+</div>
+<div class="body">
+    <h3>This is a tutorial on Flask.</h3>
+    <h4>Hope you'll enjoy it</h4>
+</div>
+
+<div>
+    <img src="{{user_image}}" alt="User Image">
+    <img src="{{selfie}}" alt="Selfie", class="imtip">
+</div>
+
+
+{% endblock %}
+
