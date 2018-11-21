@@ -22,8 +22,8 @@ Misaka(app) # To use markdown in the template
 @app.route('/')
 def index():
     full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'lina.jpeg')
-    # selfie = os.path.join(app.config['UPLOAD_FOLDER'], 'IMG_8441.jpg')
-    return render_template('index.html', user_image=full_filename)
+    selfie = os.path.join(app.config['UPLOAD_FOLDER'], 'James.JPG')
+    return render_template('index.html', user_image=full_filename, selfie = selfie)
 
 @app.route('/user/<name>')
 def user(name):
