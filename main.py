@@ -15,6 +15,7 @@ PEOPLE_FOLDER = os.path.join('static', 'people_photo')
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'iridescent'
 app.config['UPLOAD_FOLDER'] = PEOPLE_FOLDER
+app.config['ENV'] = ""
 bootstrap = Bootstrap(app)
 Misaka(app) # To use markdown in the template
 
@@ -22,7 +23,7 @@ Misaka(app) # To use markdown in the template
 @app.route('/')
 def index():
     full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'lina.jpeg')
-    selfie = os.path.join(app.config['UPLOAD_FOLDER'], 'James.JPG')
+    selfie = os.path.join(app.config['UPLOAD_FOLDER'], 'selfie.jpg')
     return render_template('index.html', user_image=full_filename, selfie = selfie)
 
 @app.route('/user/<name>')
@@ -31,7 +32,8 @@ def user(name):
 
 @app.route('/home')
 def home():
-    return render_template('home.html',text=content)
+    selfie = os.path.join(app.config['UPLOAD_FOLDER'], 'selfie.jpg')
+    return render_template('home.html',text=content, selfie = selfie)
 
 @app.route('/charts')
 def chart():
@@ -40,4 +42,4 @@ def chart():
     return render_template('chart.html', values=values, labels=labels)
 
 if __name__ == "__main__":
-     app.run(host='0.0.0.0', port=5001, debug=True)
+     app.run(host='localhost', port=5001, debug=True, threaded=True)

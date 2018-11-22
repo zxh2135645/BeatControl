@@ -1,20 +1,27 @@
-<link rel="import" href="./style.css">
 {% extends "base.html" %}
  {% block page_content %}
+<!DOCTYPE html>
+     <html>
+     <script type="text/javascript" src="caman.full.min.js"></script>
+     <head>
+         <!--<link rel="stylesheet" type="text/css" href="/static/styles/style.css">-->
+     </head>
 
-<div class="page-header">
-    <h1>BeatControl under construction</h1>
-</div>
-<div class="body">
-    <h3>This is a tutorial on Flask.</h3>
-    <h4>Hope you'll enjoy it</h4>
-</div>
+     <body>
+     <div class="page-header">
+         <h1>BeatControl under construction</h1>
+     </div>
+     <div class="body">
+         <h3>This is a tutorial on Flask.</h3>
+         <h4>Hope you'll enjoy it</h4>
+     </div>
 
-<div>
-    <link rel="stylesheet" href="./style.css">
-    <img src="{{user_image}}" alt="User Image">
-    <img src="{{selfie}}" alt="Selfie", class="imtip">
-</div>
-
+     <div class="container">
+         <img src="{{user_image}}" alt="User Image">
+         <img src="{{selfie}}" alt="Selfie">
+         <div class="overlay">My Name is James</div>
+     </div>
+     </body>
+     </html>
 
 {% endblock %}
