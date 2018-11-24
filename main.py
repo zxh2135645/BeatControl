@@ -4,7 +4,16 @@ from flask_bootstrap import Bootstrap
 from flask_misaka import Misaka
 import os
 import pandas as pd
+from glob import glob
+from flask_table import Table, Col
 # import dataAnalysis as da
+
+class Item(object):
+    def __init__(self, name):
+        self.name = name
+
+class ItemTable(Table):
+    name = Col('Name')
 
 content = ""
 with open("readme.md", "r") as f:
@@ -24,7 +33,11 @@ Misaka(app) # To use markdown in the template
 def index():
     full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'lina.jpeg')
     selfie = os.path.join(app.config['UPLOAD_FOLDER'], 'selfie.jpg')
-    return render_template('index.html', user_image=full_filename, selfie = selfie)
+    items = [Item('Name1'),
+             Item('Name2'),
+             Item('Name3')]
+    table = ItemTable(items)
+    return render_template('index.html', user_image=full_filename, selfie=selfie, table=table)
 
 @app.route('/user/<name>')
 def user(name):
