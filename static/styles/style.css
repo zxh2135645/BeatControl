@@ -1,35 +1,37 @@
-div {
+/*div {
   position: relative;
   display: inline;
-}
-.imtip {
+}*/
+
+/*.imtip {
   position: absolute;
   bottom: 0;
   right: 0;
 }
-
-* {box-sizing: border-box}
+*/
+/* * {box-sizing: border-box} */
 
 /* Container needed to position the overlay. Adjust the width as needed */
-.container {
+/*.container {
   position: relative;
   width: 50%;
   max-width: 300px;
 }
+*/
 
 /* Make the image to responsive */
-.image {
+/*.image {
   display: block;
   width: 100%;
   height: auto;
-}
+}*/
 
 /* The overlay effect - lays on top of the container and over the image */
-.overlay {
+/*.overlay {
   position: absolute;
   bottom: 0;
   background: rgb(0, 0, 0);
-  background: rgba(0, 0, 0, 0.5); /* Black see-through */
+  background: rgba(0, 0, 0, 0.5); /* Black see-through *//*
   color: #f1f1f1;
   width: 100%;
   transition: .5s ease;
@@ -39,8 +41,10 @@ div {
   padding: 20px;
   text-align: center;
 }
-
+*/
 /* When you mouse over the container, fade in the overlay title */
+/*
 .container:hover .overlay {
   opacity: 1;
 }
+*/

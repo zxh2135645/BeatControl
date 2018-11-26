@@ -1,6 +1,16 @@
 {% extends "base.html" %}
  {% block page_content %}
+
 <div class="container">
     <h1>Hello, {{name}}!</h1>
 </div>
+<div class="container">
+  <img src="{{ name_url }}" alt="{{ name }}" width="512" height="512">
+</div>
+<div class="container">
+  <canvas id="canvas" width="300" height="300"></canvas>
+</div>
+
+<script type="text/javascript" src="/static/main.js"> </script>
+
 {% endblock %}

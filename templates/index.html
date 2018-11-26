@@ -1,18 +1,122 @@
+<!DOCTYPE html>
 {% extends "base.html" %}
  {% block page_content %}
-<!DOCTYPE html>
      <html>
      <!--<script type="text/javascript" src="caman.full.min.js"></script>-->
+     <script type="text/javascript" src="/static/test.js"></script>
+     <!--<link rel="stylesheet" type="text/css" href="/static/styles/style.css">-->
      <head>
-         <!--<link rel="stylesheet" type="text/css" href="/static/styles/style.css">-->
-     </head>
+       <style type="text/css">
+       .clear{
+         clear: both;
+       }
+        .under
+        {
+            position:absolute;
+            left:200px;
+            top:800px;
+            z-index:-1;
+        }
+        .over
+        {
+            position:absolute;
+            left:200px;
+            top:800px;
+            z-index:-1;
+            opacity: 0.4;
+        }
+        .container-panel{
+          float: left;
+          position:relative;
+          margin: 10px 0 0 20px;
+          height: 80px;
+          width: 100px;
+          border-right: 1px solid #A5B8D0;
+        }
+        input[type="button"], input[type="file"]{
+          width: 76px;
+        }
+        input[type="number"]{
+          width: 40px;
+          position: absolute;
+          right: 10px;
+        }
+        #controls, #properties{
+          color: #663977;
+          height: 110px;
+          background-color: #DCE6F4;
+          border-bottom: 2px solid #CSCFDF;
+        }
+        #controls .name{
+          position: absolute;
+          bottom: -30px;
+          width: 80px;
+          text-align: center;
+          right: 20px;
+          font: 12px Arial;
+          color: #9883A9;
+        }
+        #tool-images img:hover{
+          cursor: pointer;
+          border: 1px solid blue;
+        }
+        .tool-active{
+          border: 1px solid blue;
+        }
+        #tool-size ul{
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+        #tool-size li:hover, .size-active{
+          cursor: pointer;
+          border: 1px solid;
+          border-radius: 2px;
+          background-color: #FFDC88;
+        }
+        /*------------------canvases-------------------*/
+        #canvas{border:1px solid red; margin:0 auto; }
+        #canvases{
+          position: relative;
+          margin: 5px 0 0 5px;
+        }
+        #canvases:hover{
+          cursor: pointer;
+        }
+        #back-canvas{
+          position: absolute;
+          left: 0;
+          background-color: WhiteSmoke;
+        }
+        #front-canvas{
+          position: absolute;
+          left: 0;
+        }
+        /*------------------properties-------------------*/
+        /*
+        #properties{
+          position: fixed;
+          right: 5px;
+          width: 130px;
+          height: 150px;
+          padding: 0 10px 0 10px;
+        }*/
+        #properties input[type="number"]{
+          margin-right: 5px;
+          width: 60px;
+        }
+        #properties-title{
+          text-align: center;
+        }
+
+      </style>
+    </head>
 
      <body>
      <div class="page-header">
          <h1>BeatControl under construction</h1>
      </div>
      <div class="body">
-         <h3>This is a tutorial on Flask.</h3>
          <h4>Hope you'll enjoy it</h4>
      </div>
 
@@ -21,7 +125,95 @@
          <img src="{{selfie}}" alt="Selfie">
          <div class="overlay">My Name is James</div>
      </div>
-     <div>{{ table }}</div>
+     <table class="table table-sm">
+       <caption><h3>A List of Images</h3></caption>
+       {% for row in table %}
+         <tr><td><a href="/{{ row }}">{{ row }}</a></td></tr>
+       {% endfor %}
+     </table>
+     <div class="container">
+     <button onclick="myFunction()">Click Me</button>
+     <input type="button" accesskey="a" value="Next Item" onclick="myFunction()">
+     </div>
+     <!--
+     <div class="container">
+       <canvas id="canvas" width="512" height="512" style="max-height:100%" class="under"></canvas>
+       <img src="{{user_image}}" class="under" width="512" height="512" id="picture">
+       <canvas id="canvas" width="512" height="512" style="max-height:100%" class="over"></canvas>
+       <img id="myDIV" src="{{sean}}" class="over" width="512" height="512"></img>
+     </div>
+   -->
+
+<div id="controls">
+  <div class="container-panel" id="clear">
+    <p><input type="button" id="clear-canvas" value="Clear" class="btn btn-primary"></p>
+    <input type="file" id="img-file">
+    <p class="name">Setting</p>
+  </div>
+  <div class="container-panel" id="size">
+    <p><label>Width</label>
+      <input type="number" id="canvas-width" value="512" min="0">
+    </p>
+    <label>Height</label>
+    <input type="number" id="canvas-height" value="512" min="0">
+    <p class="name">Size</p>
+  </div>
+
+     <div class="container-panel" id="mouse-position">
+       <p><label>MouseX : </label><label id="mouseX"> 0 </label></p>
+       <label>MouseY : </label><label id="mouseY"> 0 </label>
+       <p class="name">Position</p>
+     </div>
+     <div class="container-panel" id="tools">
+       <div id="tool-images">
+         <img src="/static/img/pencil.jpg" id="pencil" width="32" height="32">
+         <img src="/static/img/eraser.jpeg" id="eraser" width="32" height="32">
+       </div>
+       <p class="name">Tools</p>
+     </div>
+     <div class="container-panel" id="tool-size">
+       <details open>
+         <summary>Size</summary>
+         <ul>
+           <li id="small">Small</li>
+           <li id="middle">Middle</li>
+           <li id="big">Big</li>
+         </ul>
+       </details>
+       <p class="name">Tool Size</p>
+     </div>
+     <div class="container-panel" id="color">
+       <input type="color">
+       <p class="name">Color</p>
+     </div>
+   </div>
+
+     <div class="clear"></div>
+     <div id="canvases">
+       <canvas id="back-canvas" width="512" height="512"></canvas>
+       <canvas id="front-canvas" width="512" height="512"></canvas>
+     </div>
+
+     <!--
+     <div id="properties">
+       <p id="properties-title">Image</p>
+       <p><label>Width : </label><input id="img-width" type="number" min="0"></p>
+       <p><label>Height : </label><input id="img-height" type="number" min="0"></p>
+       <input type="button" id="invert" value="Invert image">
+     </div>
+   -->
+
+     <script type="text/javascript" src="/static/draw.js"></script>
+     <!--
+     <script type="text/javascript">
+     window.onload=function(){
+       var canvas=document.getElementById("canvas");
+       var ctx=canvas.getContext("2d");
+       ctx.drawImage(document.getElementById('picture'),0,0,canvas.width, canvas.height);
+       ctx.drawImage(document.getElementById('myDIV'),0,0,canvas.width, canvas.height);
+     }
+     </script>
+   -->
      </body>
      </html>
 
