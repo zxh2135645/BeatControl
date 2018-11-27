@@ -146,6 +146,7 @@
      <div class="page-header">
          <h1>BeatControl under construction</h1>
      </div>
+     <!--
      <div class="body">
          <h4>Hope you'll enjoy it</h4>
      </div>
@@ -155,6 +156,7 @@
          <img src="{{selfie}}" alt="Selfie">
          <div class="overlay">My Name is James</div>
      </div>
+     -->
      <table class="table table-sm">
        <caption><h3>A List of Images</h3></caption>
        <tr>
@@ -163,7 +165,7 @@
        </tr>
        {% for row in table %}
          <tr><td><a href="/{{ row }}">{{ row }}</a></td>
-           <td><label class="label label-default">Undone</label></td>
+           <td><label class="label label-default">{{ status[loop.index] }}</label></td>
          </tr>
        {% endfor %}
      </table>
