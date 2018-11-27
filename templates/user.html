@@ -7,23 +7,23 @@
      <script type="text/javascript" src="/static/test.js"></script>
    </head>
    <body>
-<script type="text/css">
+<style type="text/css">
   .under
 {
     position:absolute;
-    left:100px;
-    top:100px;
+    left:200px;
+    top:200px;
     z-index:-1;
 }
 .over
 {
     position:absolute;
-    left:100px;
-    top:100px;
+    left:200px;
+    top:200px;
     z-index:-1;
     opacity: 0.4;
 }
-</script>
+</style>
 <div class="container">
     <h1>Hello, {{name}}!</h1>
 </div>
@@ -32,7 +32,7 @@
 </div>
 <div class="container">
     <canvas id="canvas" width="512" height="512" style="max-height:100%" class="under"></canvas>
-    <!--<img src="{{ name_url }}" class="under" width="512" height="512" id="picture">-->
+    <img src="{{ name_url }}" class="under" width="512" height="512" id="picture">
     <canvas id="canvas" width="512" height="512" style="max-height:100%" class="over"></canvas>
     <img id="myDIV" src="{{ name_url }}" class="over" width="512" height="512"></img>
   </div>
@@ -43,7 +43,7 @@
   </div>
 
   <script type="text/javascript" src="/static/main.js"> </script>-->
-
+  
   <script type="text/javascript">
   window.onload=function(){
     var canvas=document.getElementById("canvas");
@@ -52,6 +52,7 @@
     ctx.drawImage(document.getElementById('myDIV'),0,0,canvas.width, canvas.height);
   }
   </script>
+
 </body>
 </html>
 {% endblock %}
