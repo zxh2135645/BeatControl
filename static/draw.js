@@ -24,12 +24,12 @@ sizes.big = document.getElementById('big');
 var eraserSize = 8;
 var eraserCursor = "url('/static/img/eraser.jpeg'), auto";
 var canvasClear = document.getElementById('clear-canvas'),
-    fileImg = document.getElementById('file-Img'),
+    fileImg = document.getElementById('img-file'),
     properties = document.getElementById('properties'),
     imgWidth = document.getElementById('img-width'),
     imgHeight = document.getElementById('img-height');
 
-var startX = 100, startY = 100;
+var startX = 0, startY = 0;
 
 window.onload = function() {
   canvasPosition = canvasBack.getBoundingClientRect();
@@ -103,34 +103,48 @@ operations['mousedown'] = function() {
   processing = true;
   ctxb.beginPath();
   console.log('mouse down!');
+  console.log(processing);
 }
 
 operations['mouseup'] = function() {
   processing = false;
+  console.log(processing);
 }
 
 canvasFront.addEventListener("mousedown", operations["mousedown"]);
 
 canvasFront.addEventListener("mouseup", operations["mouseup"]);
 
-canvasFront.addEventListener("mousemove", operations["mousemove"]);
-// canvasFront.onmousemove = operations["mousemove"];
+canvasFront.addEventListener("onmousemove", operations["mousemove"]);
+
+//canvasBack.addEventListener("mousedown", operations["mousedown"]);
+
+//canvasBack.addEventListener("mouseup", operations["mouseup"]);
+
+//canvasBack.addEventListener("mousemove", operations["mousemove"]);
+//canvasFront.onmousemove = operations["mousemove"];
+//$("#front-canvas").mousemove(operations["mousemove"]);
+//$("#back-canvas").mousemove(operations["mousemove"]);
 
 tools.pencil.onclick = function() {
-  canvasFront.style.cursor = "pointer";
+  canvasFront.style.cursor = "crosshair";
   console.log("This is working?")
+  console.log(processing)
+  console.log('No Way!')
   operations['mousemove'] = function() {
     console.log(processing);
     if (processing) {
       console.log("This is working???")
       ctxb.lineTo(mouseX, mouseY);
       ctxb.stroke();
+      ctxf.lineTo(mouseX, mouseY);
+      ctxf.stroke();
       console.log("This is working")
     };
   };
 };
 
-/*
+
 tools.eraser.onclick = function() {
   operations['mousemove'] = function() {
     canvasFront.style.cursor = eraserCursor;
@@ -139,4 +153,52 @@ tools.eraser.onclick = function() {
     };
   };
 };
-*/
+
+color.onchange = function(e) {
+  ctxb.strokeStyle = e.srcElement.value;
+}
+
+fileImg.onchange = function() {
+  var file = fileImg.files[0];
+  var reader = new FileReader();
+  reader.onload = function(event) {
+    var dataUri = event.target.result;
+    img = new Image();
+    img.onload = function() {
+      ctxf.strokeRect(startX, startY, img.width, img.height);
+      ctxf.drawImage(img, startX, startY);
+
+      operations['mousemove'] = function() {
+        if (processing) {
+          canvasFront.width = convasFront.width;
+          ctxf.strokeRect(mouseX, mouseY, imgWidth, imgHeight.value);
+          ctxf.drawImage(img, mouseX, mouseY, imgWidth.value, imgHeight.value);
+        };
+      };
+      operations['mouseup'] = function() {
+        properties.style.display = 'none';
+        canvasFront.width = canvasFront.width;
+        processing = false;
+        ctxb.drawImage(img, mouseX, mouseY, imgWidth.value, imgHeight.value);
+        operations['mousemove'] = undefined;
+        operations['mouseup'] = function() {
+          processing = false;
+        };
+      };
+    };
+    img.src = dataUri;
+    properties.style.display = 'block';
+    imgWidth.value = img.width;
+    imgHeight.value = img.height;
+  };
+  reader.readAsDataURL(file);
+}
+
+imgWidth.addEventListener("change", changeImgSize);
+imgHeight.addEventListener("change", changeImgSize);
+
+function changeImgSize() {
+  canvasFront.width = canvasFront.width;
+  ctxf.strokeRect(startX, startY, imgWidth.value, imgHeight.value);
+  ctxf.drawImage(img, startX, startY, imgWidth.value, imgHeight.value);
+}

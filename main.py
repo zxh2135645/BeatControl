@@ -37,13 +37,14 @@ def index():
     full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'lina.jpeg')
     selfie = os.path.join(app.config['UPLOAD_FOLDER'], 'selfie.jpg')
     sean = os.path.join(app.config['UPLOAD_FOLDER'], 'sean.png')
-    file_glob = glob(os.path.join(app.config['QC_FOLDER'], '*'))
-    fname = sorted([f.split('/')[-1] for f in file_glob])
+    file_glob = glob(os.path.join(app.config['QC_FOLDER'], 'T1_*'))
+    fname = sorted([f.split('\\')[-1] for f in file_glob])
     return render_template('index.html', user_image=full_filename, selfie=selfie, table=fname, sean=sean)
 
 @app.route('/<name>')
 def user(name):
     name_url = os.path.join(app.config['QC_FOLDER'], name)
+    print(name)
     return render_template('user.html',name=name, name_url=name_url)
 
 @app.route('/home')

@@ -1,16 +1,57 @@
 {% extends "base.html" %}
  {% block page_content %}
-
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+     <meta charset="utf-8">
+     <script type="text/javascript" src="/static/test.js"></script>
+   </head>
+   <body>
+<script type="text/css">
+  .under
+{
+    position:absolute;
+    left:100px;
+    top:100px;
+    z-index:-1;
+}
+.over
+{
+    position:absolute;
+    left:100px;
+    top:100px;
+    z-index:-1;
+    opacity: 0.4;
+}
+</script>
 <div class="container">
     <h1>Hello, {{name}}!</h1>
 </div>
 <div class="container">
-  <img src="{{ name_url }}" alt="{{ name }}" width="512" height="512">
+  <input type="button" accesskey="a" value="Mask" onclick="myFunction()">
 </div>
 <div class="container">
-  <canvas id="canvas" width="300" height="300"></canvas>
-</div>
+    <canvas id="canvas" width="512" height="512" style="max-height:100%" class="under"></canvas>
+    <!--<img src="{{ name_url }}" class="under" width="512" height="512" id="picture">-->
+    <canvas id="canvas" width="512" height="512" style="max-height:100%" class="over"></canvas>
+    <img id="myDIV" src="{{ name_url }}" class="over" width="512" height="512"></img>
+  </div>
+  <!--<img src="{{ name_url }}" alt="{{ name }}" width="512" height="512">-->
+  <!--
+  <div class="container">
+    <canvas id="canvas" width="300" height="300"></canvas>
+  </div>
 
-<script type="text/javascript" src="/static/main.js"> </script>
+  <script type="text/javascript" src="/static/main.js"> </script>-->
 
+  <script type="text/javascript">
+  window.onload=function(){
+    var canvas=document.getElementById("canvas");
+    var ctx=canvas.getContext("2d");
+    ctx.drawImage(document.getElementById('picture'),0,0,canvas.width, canvas.height);
+    ctx.drawImage(document.getElementById('myDIV'),0,0,canvas.width, canvas.height);
+  }
+  </script>
+</body>
+</html>
 {% endblock %}

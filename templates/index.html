@@ -4,6 +4,7 @@
      <html>
      <!--<script type="text/javascript" src="caman.full.min.js"></script>-->
      <script type="text/javascript" src="/static/test.js"></script>
+     <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
      <!--<link rel="stylesheet" type="text/css" href="/static/styles/style.css">-->
      <head>
        <style type="text/css">
@@ -75,7 +76,7 @@
           background-color: #FFDC88;
         }
         /*------------------canvases-------------------*/
-        #canvas{border:1px solid red; margin:0 auto; }
+        /*#canvas{border:1px solid red; margin:0 auto; }*/
         #canvases{
           position: relative;
           margin: 5px 0 0 5px;
@@ -93,14 +94,15 @@
           left: 0;
         }
         /*------------------properties-------------------*/
-        /*
+
         #properties{
-          position: fixed;
-          right: 5px;
-          width: 130px;
+          position: relative;
+          left: 800px;
+          bottom: 0;
+          width: 150px;
           height: 150px;
-          padding: 0 10px 0 10px;
-        }*/
+          padding: 0 0 0 0;
+        }
         #properties input[type="number"]{
           margin-right: 5px;
           width: 60px;
@@ -127,8 +129,14 @@
      </div>
      <table class="table table-sm">
        <caption><h3>A List of Images</h3></caption>
+       <tr>
+         <th>Image</th>
+         <th>Status</th>
+       </tr>
        {% for row in table %}
-         <tr><td><a href="/{{ row }}">{{ row }}</a></td></tr>
+         <tr><td><a href="/{{ row }}">{{ row }}</a></td>
+           <td><label class="label label-default">Undone</label></td>
+         </tr>
        {% endfor %}
      </table>
      <div class="container">
@@ -194,14 +202,14 @@
        <canvas id="front-canvas" width="512" height="512"></canvas>
      </div>
 
-     <!--
+
      <div id="properties">
        <p id="properties-title">Image</p>
        <p><label>Width : </label><input id="img-width" type="number" min="0"></p>
        <p><label>Height : </label><input id="img-height" type="number" min="0"></p>
        <input type="button" id="invert" value="Invert image">
      </div>
-   -->
+
 
      <script type="text/javascript" src="/static/draw.js"></script>
      <!--
@@ -213,7 +221,7 @@
        ctx.drawImage(document.getElementById('myDIV'),0,0,canvas.width, canvas.height);
      }
      </script>
-   -->
+     -->
      </body>
      </html>
 
