@@ -38,14 +38,15 @@ def index():
     selfie = os.path.join(app.config['UPLOAD_FOLDER'], 'selfie.jpg')
     sean = os.path.join(app.config['UPLOAD_FOLDER'], 'sean.png')
     file_glob = glob(os.path.join(app.config['QC_FOLDER'], 'T1_*'))
-    fname = sorted([f.split('/')[-1] for f in file_glob])
+    fname = sorted([f.split('\\')[-1] for f in file_glob])
     return render_template('index.html', user_image=full_filename, selfie=selfie, table=fname, sean=sean)
 
 @app.route('/<name>')
 def user(name):
     name_url = os.path.join(app.config['QC_FOLDER'], name)
-    print(name)
-    return render_template('user.html',name=name, name_url=name_url)
+    num = name.split('_')[1].split('.')[0]
+    label_url = os.path.join(app.config['QC_FOLDER'], 'Label_' + num + '.png')
+    return render_template('user.html',name=name, name_url=name_url, label_url=label_url)
 
 @app.route('/home')
 def home():
