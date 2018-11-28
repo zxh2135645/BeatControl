@@ -111,12 +111,14 @@ operations['mouseup'] = function() {
   console.log(processing);
 }
 
-canvasFront.addEventListener("mousedown", operations["mousedown"]);
+operations_mousemove = function() {};
+operations_mousemoveErase = function() {};
 
+canvasFront.addEventListener("mousedown", operations["mousedown"]);
 canvasFront.addEventListener("mouseup", operations["mouseup"]);
 
-canvasFront.addEventListener("mousemove", operations["mousemove"]);
-
+canvasFront.addEventListener("mousemove", operations_mousemove);
+canvasFront.addEventListener("mousemove", operations_mousemoveErase);
 //canvasBack.addEventListener("mousedown", operations["mousedown"]);
 
 //canvasBack.addEventListener("mouseup", operations["mouseup"]);
@@ -127,32 +129,38 @@ canvasFront.addEventListener("mousemove", operations["mousemove"]);
 //$("#back-canvas").mousemove(operations["mousemove"]);
 
 tools.pencil.onclick = function() {
+  canvasFront.removeEventListener("mousemove", operations_mousemoveErase);
   canvasFront.style.cursor = "crosshair";
   console.log("This is working?")
   console.log(processing)
   console.log('No Way!')
-  operations['mousemove'] = function() {
-    console.log(processing);
+  operations_mousemove = function() {
+    //console.log(processing);
     if (processing) {
-      console.log("This is working???")
+      //console.log("This is working???")
       ctxb.lineTo(mouseX, mouseY);
       ctxb.stroke();
-      ctxf.lineTo(mouseX, mouseY);
-      ctxf.stroke();
-      console.log("This is working")
+      //ctxf.lineTo(mouseX, mouseY);
+      //ctxf.stroke();
+      //console.log("This is working")
     };
   };
+  canvasFront.addEventListener("mousemove", operations_mousemove);
 };
 
 
 tools.eraser.onclick = function() {
-  operations['mousemove'] = function() {
+  canvasFront.removeEventListener("mousemove", operations_mousemove);
+  operations_mousemoveErase = function() {
     canvasFront.style.cursor = eraserCursor;
     if (processing) {
       ctxb.clearRect(mouseX, mouseY, eraserSize, eraserSize);
     };
   };
+  canvasFront.addEventListener("mousemove", operations_mousemoveErase);
 };
+
+
 
 color.onchange = function(e) {
   ctxb.strokeStyle = e.srcElement.value;
@@ -165,12 +173,13 @@ fileImg.onchange = function() {
     var dataUri = event.target.result;
     img = new Image();
     img.onload = function() {
-      ctxf.strokeRect(startX, startY, img.width, img.height);
-      ctxf.drawImage(img, startX, startY);
+      ctxb.strokeRect(startX, startY, img.width, img.height);
+      ctxb.drawImage(img, startX, startY);
 
-      operations['mousemove'] = function() {
+      operations_mousemove = function() {
         if (processing) {
-          canvasFront.width = convasFront.width;
+          console.log("Is it running??")
+          canvasFront.width = canvasFront.width;
           ctxf.strokeRect(mouseX, mouseY, imgWidth, imgHeight.value);
           ctxf.drawImage(img, mouseX, mouseY, imgWidth.value, imgHeight.value);
         };
