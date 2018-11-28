@@ -228,8 +228,8 @@
 
      <div class="clear"></div>
      <div id="canvases">
-       <canvas id="back-canvas" width="512" height="512"></canvas>
-       <canvas id="front-canvas" width="512" height="512"></canvas>
+       <canvas id="back-canvas" width="512" height="512" onmousemove="operations['mousemove']"></canvas>
+       <canvas id="front-canvas" width="512" height="512" onmousemove="operations['mousemove']"></canvas>
      </div>
 
 
@@ -240,15 +240,17 @@
        <input type="button" id="invert" value="Invert image">
      </div>
 
+    <!--
      <div id="backgroundImage">
-<!--
+
     <div class="main">
 
     </div>
 
     </div>
+  -->
      <script type="text/javascript" src="/static/draw.js"></script>
-   -->
+
      <!--
      <script type="text/javascript">
      window.onload=function(){

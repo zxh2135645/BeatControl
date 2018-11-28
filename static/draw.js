@@ -115,7 +115,7 @@ canvasFront.addEventListener("mousedown", operations["mousedown"]);
 
 canvasFront.addEventListener("mouseup", operations["mouseup"]);
 
-canvasFront.addEventListener("onmousemove", operations["mousemove"]);
+canvasFront.addEventListener("mousemove", operations["mousemove"]);
 
 //canvasBack.addEventListener("mousedown", operations["mousedown"]);
 
