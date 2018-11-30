@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, make_response, jsonify
 from flask import Markup
 from flask_bootstrap import Bootstrap
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, IntegerField, SelectField
 from flask_misaka import Misaka
 import os
 import pandas as pd
@@ -34,7 +36,12 @@ Misaka(app) # To use markdown in the template
 ip_address = 'localhost'
 port = '5001'
 
-@app.route('/')
+file_glob = glob(os.path.join(app.config['QC_FOLDER'], 'T1_*'))
+status_dict = dict()
+for f in file_glob:
+    status_dict[f] = 'Undone'
+
+@app.route('/', methods=['GET', 'POST'])
 def index():
     full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'lina.jpeg')
     selfie = os.path.join(app.config['UPLOAD_FOLDER'], 'selfie.jpg')
@@ -45,11 +52,12 @@ def index():
     return render_template('index.html', user_image=full_filename, selfie=selfie,
            table=fname, sean=sean, status=status)
 
-@app.route('/<name>')
+@app.route('/<name>', methods=['GET', 'POST'])
 def user(name):
     name_url = os.path.join(app.config['QC_FOLDER'], name)
     new_name_url_list = [w.replace("\\", "/") for w in name_url]
     new_name_url = ''.join(new_name_url_list)
+    print(name)
     num = name.split('_')[1].split('.')[0]
     label_url = os.path.join(app.config['QC_FOLDER'], 'Label_' + num + '.png')
     new_label_url_list = [w.replace("\\", "/") for w in label_url]
@@ -59,8 +67,6 @@ def user(name):
     file_glob = glob(os.path.join(app.config['QC_FOLDER'], 'T1_*'))
     fname = sorted([os.path.basename(f) for f in file_glob])
     ind = fname.index(name)
-    print(name)
-    print(ind)
     if ind != 0 and ind != len(fname)-1:
         nextP = 'http://' + ip_address + ':' + port + '/' + fname[ind+1]
         prevP = 'http://' + ip_address + ':' + port + '/' + fname[ind-1]
@@ -70,11 +76,13 @@ def user(name):
     elif ind == len(fname)-1:
         nextP = 'http://' + ip_address + ':' + port + '/' + fname[0]
         prevP = 'http://' + ip_address + ':' + port + '/' + fname[ind - 1]
-    else:
-        raise ValueError("Out of Range")
-
+    undoneForm = UndoneForm()
+    unclearForm = UnclearForm()
+    editedForm = EditedForm()
+    if request.method == 'POST':
+        print(form.validate())
     return render_template('user.html',name=name, name_url=new_name_url, label_url=new_label_url,
-           download_label=download_label, nextP=nextP, prevP=prevP)
+           download_label=download_label, nextP=nextP, prevP=prevP, form=form)
 
 @app.route('/home')
 def home():
@@ -86,6 +94,15 @@ def chart():
     labels = ["January","February","March","April","May","June","July","August"]
     values = [10,9,8,7,6,4,7,8]
     return render_template('chart.html', values=values, labels=labels)
+
+class UndoneForm(FlaskForm):
+    submit = SubmitField('Undone')
+
+class EditedForm(FlaskForm):
+    submit = SubmitField('Edited')
+
+class UnclearForm(FlaskForm):
+    submit = SubmitField('Unclear')
 
 if __name__ == "__main__":
      app.run(host='localhost', port=5001, debug=True, threaded=True)

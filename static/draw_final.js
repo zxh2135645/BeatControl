@@ -81,19 +81,19 @@ function removeAllClasses(arr) {
 }
 
 sizes.small.onclick = function() {
-  ctxf.lineWidth = 1;
-  eraserSize = 8;
+  ctxf.lineWidth = 6;
+  eraserSize = 16;
   eraserCursor = "url('/static/img/eraser.jpeg'), auto";
 }
 sizes.middle.onclick = function() {
-  ctxf.lineWidth = 5;
-  eraserSize = 16;
+  ctxf.lineWidth = 12;
+  eraserSize = 32;
   eraserCursor = "url('/static/img/eraser.jpeg'), auto";
   console.log("This is working??")
 }
 sizes.big.onclick = function() {
-  ctxf.lineWidth = 15;
-  eraserSize = 32;
+  ctxf.lineWidth = 24;
+  eraserSize = 48;
   eraserCursor = "url('/static/img/eraser.jpeg'), auto";
 }
 
