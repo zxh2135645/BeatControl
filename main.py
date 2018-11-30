@@ -30,7 +30,9 @@ app.config['QC_FOLDER'] = QC_FOLDER
 app.config['ENV'] = ""
 bootstrap = Bootstrap(app)
 Misaka(app) # To use markdown in the template
-print(app.config['UPLOAD_FOLDER'])
+# print(app.config['UPLOAD_FOLDER'])
+ip_address = 'localhost'
+port = '5001'
 
 @app.route('/')
 def index():
@@ -46,9 +48,33 @@ def index():
 @app.route('/<name>')
 def user(name):
     name_url = os.path.join(app.config['QC_FOLDER'], name)
+    new_name_url_list = [w.replace("\\", "/") for w in name_url]
+    new_name_url = ''.join(new_name_url_list)
     num = name.split('_')[1].split('.')[0]
     label_url = os.path.join(app.config['QC_FOLDER'], 'Label_' + num + '.png')
-    return render_template('user.html',name=name, name_url=name_url, label_url=label_url)
+    new_label_url_list = [w.replace("\\", "/") for w in label_url]
+    new_label_url = ''.join(new_label_url_list)
+    download_label = 'Label_' + num + '_edited.png'
+
+    file_glob = glob(os.path.join(app.config['QC_FOLDER'], 'T1_*'))
+    fname = sorted([os.path.basename(f) for f in file_glob])
+    ind = fname.index(name)
+    print(name)
+    print(ind)
+    if ind != 0 and ind != len(fname)-1:
+        nextP = 'http://' + ip_address + ':' + port + '/' + fname[ind+1]
+        prevP = 'http://' + ip_address + ':' + port + '/' + fname[ind-1]
+    elif ind == 0:
+        nextP = 'http://' + ip_address + ':' + port + '/' + fname[ind+1]
+        prevP = 'http://' + ip_address + ':' + port + '/' + fname[-1]
+    elif ind == len(fname)-1:
+        nextP = 'http://' + ip_address + ':' + port + '/' + fname[0]
+        prevP = 'http://' + ip_address + ':' + port + '/' + fname[ind - 1]
+    else:
+        raise ValueError("Out of Range")
+
+    return render_template('user.html',name=name, name_url=new_name_url, label_url=new_label_url,
+           download_label=download_label, nextP=nextP, prevP=prevP)
 
 @app.route('/home')
 def home():

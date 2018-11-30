@@ -4,15 +4,17 @@
  <html lang="en">
    <head>
      <meta charset="utf-8">
-     <script type="text/javascript" src="/static/test.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
      <link rel="stylesheet" href="/static/styles/style_final.css">
+     <!--<script type="text/javascript" src="/static/test.js"></script>-->
+     <script type="text/javascript" src="/static/pager.js"></script>
    </head>
    <body>
 
 <div id="controls">
   <div class="container-panel" id="clear">
     <p><input type="button" id="clear-canvas" value="Clear" class="btn btn-primary btn-sm"></p>
-    <input type="file" id="img-file">
+    <input type="button" id="save-file" value="Save" class="btn btn-primary btn-sm" onclick="saveImage('{{ download_label }}')" download>
     <p class="name">Setting</p>
   </div>
   <div class="container-panel" id="size">
@@ -23,57 +25,62 @@
     <input type="number" id="canvas-height" value="512" min="0">
     <p class="name">Size</p>
   </div>
+  <div class="container-panel" id="mouse-position">
+    <p><label>MouseX : </label><label id="mouseX"> 0 </label></p>
+    <label>MouseY : </label><label id="mouseY"> 0 </label>
+    <p class="name">Position</p>
+  </div>
+  <div class="container-panel" id="tools">
+    <div id="tool-images">
+      <img src="/static/img/pencil.jpg" id="pencil" width="32" height="32">
+      <img src="/static/img/eraser.jpeg" id="eraser" width="32" height="32">
+    </div>
+    <p class="name">Tools</p>
+  </div>
+  <div class="container-panel" id="tool-size">
+    <details open>
+      <summary>Size</summary>
+      <ul>
+        <li id="small">Small</li>
+        <li id="middle">Middle</li>
+        <li id="big">Big</li>
+      </ul>
+    </details>
+    <p class="name">Tool Size</p>
+  </div>
+  <div class="container-panel" id="color">
+    <input type="color" value="#ffffff" id="myColor">
+    <p class="name">Color</p>
+  </div>
+</div>
+<div class="clear"></div>
+<div class="container">
+  <h2>Hello, {{name}}</h2>
+</div>
+<div class="container">
+  <input type="button" accesskey="a" value="Mask" onclick="myFunction()" class="btn btn-primary btn-sm">
 
-     <div class="container-panel" id="mouse-position">
-       <p><label>MouseX : </label><label id="mouseX"> 0 </label></p>
-       <label>MouseY : </label><label id="mouseY"> 0 </label>
-       <p class="name">Position</p>
-     </div>
-     <div class="container-panel" id="tools">
-       <div id="tool-images">
-         <img src="/static/img/pencil.jpg" id="pencil" width="32" height="32">
-         <img src="/static/img/eraser.jpeg" id="eraser" width="32" height="32">
-       </div>
-       <p class="name">Tools</p>
-     </div>
-     <div class="container-panel" id="tool-size">
-       <details open>
-         <summary>Size</summary>
-         <ul>
-           <li id="small">Small</li>
-           <li id="middle">Middle</li>
-           <li id="big">Big</li>
-         </ul>
-       </details>
-       <p class="name">Tool Size</p>
-     </div>
-     <div class="container-panel" id="color">
-       <input type="color">
-       <p class="name">Color</p>
-     </div>
-   </div>
+  <input type="button" accesskey="j" value="Previous" onclick="prevPage('{{ prevP }}')" class="btn btn-primary btn-sm">
+  <input type="button" accesskey="k" value="Next" onclick="nextPage('{{ nextP }}')" class="btn btn-primary btn-sm">
+  <!--<button onclick="cUndo()" accesskey="z">Undo</button>-->
 
-     <div class="clear"></div>
-     <div class="container">
-         <h2>Hello, {{name}}!</h2>
-     </div>
-     <div class="container">
-       <input type="button" accesskey="a" value="Mask" onclick="myFunction()">
-     </div>
+</div>
+<div id="canvases">
+  <canvas id="back-canvas" width="512" height="512""></canvas>
+  <!--<input type="file" id="file_input" onchange=loadImg("{{ name_url }}")>-->
+  <!--<img src="{{ name_url }}" class="under" width="512" height="512" id="picture">-->
+  <canvas id="front-canvas" width="512" height="512"></canvas>
+  <!--<img id="myDIV" src="{{ label_url }}" class="over" width="512" height="512"></img>-->
+</div>
+<div id="properties">
+  <p id="properties-title">Image</p>
+  <p><label>Width : </label><input id="img-width" type="number" min="0"></p>
+  <p><label>Height : </label><input id="img-height" type="number" min="0"></p>
+</div>
 
-     <div id="canvases">
-       <canvas id="back-canvas" width="512" height="512"></canvas>
-       <!--<img src="{{ name_url }}" class="under" width="512" height="512" id="picture">-->
-       <canvas id="front-canvas" width="512" height="512"></canvas>
-       <!--<img id="myDIV" src="{{ label_url }}" class="over" width="512" height="512"></img>-->
-     </div>
-
-     <div id="properties">
-       <p id="properties-title">Image</p>
-       <p><label>Width : </label><input id="img-width" type="number" min="0"></p>
-       <p><label>Height : </label><input id="img-height" type="number" min="0"></p>
-     </div>
-
+<script type="text/javascript" src="/static/draw_final.js"></script>
+<script type="text/javascript"> loadImgBack('{{ name_url }}') </script>
+<script type="text/javascript"> loadImgFront('{{ label_url }}') </script>
 <!--
     <div class="container">
     <canvas id="canvas" width="512" height="512" style="max-height:100%" class="under"></canvas>
@@ -89,7 +96,7 @@
   </div>
 
   <script type="text/javascript" src="/static/main.js"> </script>-->
-
+  <!--
   <script type="text/javascript">
   window.onload=function(){
     var canvas=document.getElementById("canvas");
@@ -98,7 +105,8 @@
     ctx.drawImage(document.getElementById('myDIV'),0,0,canvas.width, canvas.height);
   }
   </script>
-  <script type="text/javascript" src="/static/draw_final.js"></script>
+  -->
+
 
 </body>
 </html>

@@ -132,8 +132,6 @@ tools.pencil.onclick = function() {
   canvasFront.removeEventListener("mousemove", operations_mousemoveErase);
   canvasFront.style.cursor = "crosshair";
   console.log("This is working?")
-  console.log(processing)
-  console.log('No Way!')
   operations_mousemove = function() {
     //console.log(processing);
     if (processing) {
@@ -175,6 +173,25 @@ fileImg.onchange = function() {
     img.onload = function() {
       ctxb.strokeRect(startX, startY, img.width, img.height);
       ctxb.drawImage(img, startX, startY);
+
+      operations_mousemove = function() {
+        if (processing) {
+          console.log("Is it running??")
+          canvasFront.width = canvasFront.width;
+          ctxf.strokeRect(mouseX, mouseY, imgWidth, imgHeight.value);
+          ctxf.drawImage(img, mouseX, mouseY, imgWidth.value, imgHeight.value);
+        };
+      };
+      operations['mouseup'] = function() {
+        properties.style.display = 'none';
+        canvasFront.width = canvasFront.width;
+        processing = false;
+        ctxb.drawImage(img, mouseX, mouseY, imgWidth.value, imgHeight.value);
+        operations['mousemove'] = undefined;
+        operations['mouseup'] = function() {
+          processing = false;
+        };
+      };
     };
     img.src = dataUri;
     properties.style.display = 'block';
