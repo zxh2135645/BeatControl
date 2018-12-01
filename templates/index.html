@@ -165,7 +165,7 @@
        </tr>
        {% for row in table %}
          <tr><td><a href="/{{ row }}">{{ row }}</a></td>
-           <td><label class="label label-default">{{ status[loop.index] }}</label></td>
+           <td><label class="{{ label_class[loop.index-1] }}">{{ status[loop.index-1] }}</label></td>
          </tr>
        {% endfor %}
      </table>

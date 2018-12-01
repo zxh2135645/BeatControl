@@ -8,6 +8,7 @@ import os
 import pandas as pd
 from glob import glob
 from flask_table import Table, Col
+import json
 # import dataAnalysis as da
 
 """
@@ -36,28 +37,55 @@ Misaka(app) # To use markdown in the template
 ip_address = 'localhost'
 port = '5001'
 
+status_file = os.path.join('static', 'status.json')
 file_glob = glob(os.path.join(app.config['QC_FOLDER'], 'T1_*'))
-status_dict = dict()
-for f in file_glob:
-    status_dict[f] = 'Undone'
+fname = sorted([os.path.basename(f) for f in file_glob])
+
+if os.path.isfile(status_file):
+    with open(status_file, 'r') as fp:
+        status_dict = json.load(fp)
+    if len(status_file) != len(file_glob):
+        data_set = set(list(status_dict.keys()))
+        glob_set = set(fname)
+        newly_added = glob_set - (glob_set & data_set)
+        newly_added = list(newly_added)
+        for f in newly_added:
+            status_dict[f] = 'Undone'
+        with open(status_file, 'w') as fp:
+            json.dump(status_dict, fp)
+
+if not os.path.isfile(status_file):
+    status_dict = dict()
+    for f in fname:
+        status_dict[f] = 'Undone'
+    with open(status_file, 'w') as fp:
+        json.dump(status_dict, fp)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'lina.jpeg')
     selfie = os.path.join(app.config['UPLOAD_FOLDER'], 'selfie.jpg')
     sean = os.path.join(app.config['UPLOAD_FOLDER'], 'sean.png')
-    file_glob = glob(os.path.join(app.config['QC_FOLDER'], 'T1_*'))
-    fname = sorted([os.path.basename(f) for f in file_glob])
-    status = ['Undone'] * len(fname)
+    # file_glob = glob(os.path.join(app.config['QC_FOLDER'], 'T1_*'))
+    # fname = sorted([os.path.basename(f) for f in file_glob])
+    with open(status_file, 'r') as fp:
+        status_dict = json.load(fp)
+    status = list(status_dict.values())
+    label_class = ['label label-default'] * len(status)
+    for i, stat in enumerate(status):
+        if stat == 'Unclear':
+            label_class[i] = 'label label-warning'
+        elif stat == 'Edited':
+            label_class[i] = 'label label-success'
     return render_template('index.html', user_image=full_filename, selfie=selfie,
-           table=fname, sean=sean, status=status)
+           table=fname, sean=sean, status=status, label_class=label_class)
 
 @app.route('/<name>', methods=['GET', 'POST'])
 def user(name):
     name_url = os.path.join(app.config['QC_FOLDER'], name)
     new_name_url_list = [w.replace("\\", "/") for w in name_url]
     new_name_url = ''.join(new_name_url_list)
-    print(name)
     num = name.split('_')[1].split('.')[0]
     label_url = os.path.join(app.config['QC_FOLDER'], 'Label_' + num + '.png')
     new_label_url_list = [w.replace("\\", "/") for w in label_url]
@@ -79,10 +107,20 @@ def user(name):
     undoneForm = UndoneForm()
     unclearForm = UnclearForm()
     editedForm = EditedForm()
+
     if request.method == 'POST':
-        print(form.validate())
+        if 'Undone' in request.form.values():
+            status_dict[name] = 'Undone'
+        elif 'Edited' in request.form.values():
+            status_dict[name] = 'Edited'
+        elif 'Unclear' in request.form.values():
+            status_dict[name] = 'Unclear'
+        with open(status_file, 'w') as fp:
+            json.dump(status_dict, fp)
+
     return render_template('user.html',name=name, name_url=new_name_url, label_url=new_label_url,
-           download_label=download_label, nextP=nextP, prevP=prevP, form=form)
+           download_label=download_label, nextP=nextP, prevP=prevP, undoneForm=undoneForm,
+           unclearForm=unclearForm, editedForm=editedForm)
 
 @app.route('/home')
 def home():
@@ -96,13 +134,13 @@ def chart():
     return render_template('chart.html', values=values, labels=labels)
 
 class UndoneForm(FlaskForm):
-    submit = SubmitField('Undone')
+    submit1 = SubmitField('Undone')
 
 class EditedForm(FlaskForm):
-    submit = SubmitField('Edited')
+    submit2 = SubmitField('Edited')
 
 class UnclearForm(FlaskForm):
-    submit = SubmitField('Unclear')
+    submit3 = SubmitField('Unclear')
 
 if __name__ == "__main__":
      app.run(host='localhost', port=5001, debug=True, threaded=True)

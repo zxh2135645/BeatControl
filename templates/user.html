@@ -57,7 +57,7 @@
 </div>
 <div class="clear"></div>
 <div class="container">
-  <h2>Hello, {{name}}</h2>
+  <h2>{{name}}</h2>
 </div>
 <div class="container">
   <input type="button" accesskey="a" value="Mask" onclick="myFunction()" class="btn btn-primary btn-sm">
@@ -66,7 +66,7 @@
   <input type="button" accesskey="k" value="Next" onclick="nextPage('{{ nextP }}')" class="btn btn-primary btn-sm">
   <!--<button onclick="cUndo()" accesskey="z">Undo</button>-->
   <form method="post">
-    {{wtf.quick_form(form)}}
+    {{ wtf.quick_form(undoneForm) }} {{ wtf.quick_form(unclearForm) }} {{ wtf.quick_form(editedForm) }}
   </form>
 </div>
 
@@ -78,7 +78,7 @@
   <!--<img id="myDIV" src="{{ label_url }}" class="over" width="512" height="512"></img>-->
 </div>
 <div id="properties">
-  <p id="properties-title">Image</p>
+  <p id="properties-title">Resize Image</p>
   <p><label>Width : </label><input id="img-width" type="number" min="0"></p>
   <p><label>Height : </label><input id="img-height" type="number" min="0"></p>
 </div>
