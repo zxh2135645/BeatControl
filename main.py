@@ -9,6 +9,7 @@ import pandas as pd
 from glob import glob
 from flask_table import Table, Col
 import json
+import collections
 # import dataAnalysis as da
 
 """
@@ -71,6 +72,7 @@ def index():
     # fname = sorted([os.path.basename(f) for f in file_glob])
     with open(status_file, 'r') as fp:
         status_dict = json.load(fp)
+    status_dict = collections.OrderedDict(sorted(status_dict.items()))
     status = list(status_dict.values())
     label_class = ['label label-default'] * len(status)
     for i, stat in enumerate(status):
@@ -78,6 +80,7 @@ def index():
             label_class[i] = 'label label-warning'
         elif stat == 'Edited':
             label_class[i] = 'label label-success'
+
     return render_template('index.html', user_image=full_filename, selfie=selfie,
            table=fname, sean=sean, status=status, label_class=label_class)
 
