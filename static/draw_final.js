@@ -25,10 +25,10 @@ sizes.big = document.getElementById('big');
 
 var eraserSize = 8;
 var eraserCursor = "url('/static/img/eraser.jpeg'), auto";
-var canvasClear = document.getElementById('clear-canvas'),
-    properties = document.getElementById('properties'),
-    imgWidth = document.getElementById('img-width'),
-    imgHeight = document.getElementById('img-height');
+var canvasClear = document.getElementById('clear-canvas');
+//properties = document.getElementById('properties'),
+//imgWidth = document.getElementById('img-width'),
+//imgHeight = document.getElementById('img-height');
 
 var startX = 0, startY = 0;
 
@@ -177,6 +177,7 @@ color.onchange = function(e) {
   console.log(ctxf.strokeStyle);
 }
 
+/*
 imgWidth.addEventListener("change", changeImgSize);
 imgHeight.addEventListener("change", changeImgSize);
 
@@ -184,7 +185,7 @@ function changeImgSize() {
   canvasFront.width = canvasFront.width;
   ctxf.strokeRect(startX, startY, imgWidth.value, imgHeight.value);
   ctxf.drawImage(img, startX, startY, imgWidth.value, imgHeight.value);
-}
+}*/
 
 // Downloaidng two files
 function saveImage(url) {
